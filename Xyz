@@ -1,0 +1,57 @@
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy import integrate
+def f(x,y,z,E):
+	return -2*E*y
+def D(xi,xf,y,z,n,E):
+	xx,yy=[],[]
+	h=(xf-xi)/(n-1)
+	for i in range(n):
+		x=xi+i*h
+		xx.append(x)
+		ya=y
+		y=y+h*z
+		z=z+h*f(x,ya,z,E)
+		yy.append(y)
+	return xx,yy
+xi=-1
+xf=1
+yi=0
+zi=0.1
+n=200
+aa,En=[],[]
+E=np.arange(0,90,0.01)
+for i in range(len(E)):	
+	a1,a2=D(xi,xf,yi,zi,n,E[i])
+	aa.append(a2[-1])
+#plt.subplot(2,3,5)	
+#plt.plot(E,aa)
+plt.axhline()
+
+
+for i in range(len(aa)-1):
+	if aa[i+1]*aa[i]<0:
+		ee=(E[i+1]+E[i])*0.5
+		En.append(ee)
+print(En)
+for i in range(len(En)-6):
+	t,psi=[],[]
+	b1,b2=D(xi,xf,yi,zi,n,En[i])
+	for j in range(len(b2)):
+		t.append(b2[j]**2)
+	N=1/(integrate.simps(t,b1))**0.5
+	for k in range(len(b2)):
+	 	psi.append(N*b2[k])
+	 		 
+	#plt.subplot(2,3,i+1)
+	plt.plot(b1,psi)
+	plt.axhline()
+
+
+plt.show()
+tt=[]
+for i in range(len(psi)):
+	tt.append(psi[i]**2)
+s=np.trapz(tt,b1)
+print(s)
+		
