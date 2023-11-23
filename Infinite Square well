@@ -1,0 +1,56 @@
+#Infinite square well
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy import integrate
+def f(x,y,z,E):
+	return -2*E*y
+def D(xi,xf,y,z,n,E):
+	xx,yy=[],[]
+	h=(xf-xi)/(n-1)
+	for i in range(n):
+		x=xi+i*h
+		xx.append(x)
+		y=y+h*z
+		z=z+h*f(x,y,z,E)
+		yy.append(y)
+	return xx,yy
+xi=-1
+xf=1
+yi=0
+zi=0.1
+n=2000
+aa,En=[],[]
+n1,n2,n3=0,15,0.01
+E=np.arange(n1,n2,n3)
+for i in range(len(E)):	
+	x1,y1=D(xi,xf,yi,zi,n,E[i])
+	aa.append(y1[-1])
+#plt.plot(E,aa)
+plt.title('energy eigen value curve',size=20)
+plt.ylabel('$\psi(x=xf)\\rightarrow$',size=20)
+plt.xlabel('Energy E----->',size=20)
+for i in range(len(aa)-1):
+	if aa[i+1]*aa[i]<0:
+		e=(E[i+1]+E[i])*0.5
+		En.append(e)
+print('The energy eigen values are:',En)
+U=['ground state','1st excited state','2nd excited state']
+V=['--','o','+']
+for i in range(len(En)):
+	x2,y2=D(xi,xf,yi,zi,n,En[i])
+	#Normalization
+	x2=np.array(x2)
+	y2=np.array(y2)
+	N=(1/np.trapz(y2*y2,x2))**0.5
+	plt.plot(x2,N*y2,V[i],label=U[i])
+
+plt.axhline()
+plt.axvline()
+plt.title('Normalised wave function for Infinte Square well potential',size=20)
+plt.xlabel('x$\\rightarrow$',size=30)
+plt.ylabel('$\psi(x)\\rightarrow$',size=30)
+plt.legend()
+plt.show()
+
+
+		
