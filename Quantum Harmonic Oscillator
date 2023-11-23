@@ -1,0 +1,48 @@
+#Quantum Harmonic Oscillator 
+import matplotlib.pyplot as plt
+import numpy as np
+def f(x,y,z,e):
+ return (x**2-2*e)*y
+def D(xi,xf,y,z,n,e):
+ xx,yy=[],[]
+ h=(xf-xi)/(n-1)
+ for i in range(n):
+  x=xi+i*h
+  xx.append(x)
+  ya=y
+  y=y+h*z
+  z=z+h*f(x,ya,z,e)
+  yy.append(y)
+ return xx,yy
+e=np.arange(0,6,0.1)
+aa,en=[],[]
+a=4.5
+yi=0
+zi=0.01
+n=10000
+for i in range(len(e)):
+	 a1,a2=D(-a,a,yi,zi,n,e[i])
+	 aa.append(a2[-1])
+#plt.plot(e,aa)
+#plt.title('energy eigen value curve',size=20)
+#plt.ylabel('$\psi(x=xf)$----->',size=30)
+#plt.xlabel("Energy E---->",size=30)
+#plt.axhline()
+#plt.show()
+for i in range(len(e)-1):
+	 if aa[i]*aa[i+1]<0:
+	  en.append(e[i])
+print('energy eigen values are',en)
+for i in range(len(en)-3):
+	 x1,y1=D(-a,a,yi,zi,n,en[i])
+	 x1=np.array(x1)
+	 y1=np.array(y1)
+	 N=(1/np.trapz(y1**2,x1))**0.5
+	 plt.plot(x1,N*y1)
+plt.title('Quantum harmonic oscillator',size=30)
+plt.xlabel('x------>',size=30)
+plt.ylabel('$\psi(x)$------->',size=30)
+plt.axhline()
+plt.axvline()
+plt.grid()
+plt.show()
