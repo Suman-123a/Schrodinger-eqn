@@ -1,0 +1,45 @@
+#Half harmonic oscillator
+import matplotlib.pyplot as plt
+import numpy as np
+a=4.5
+def f(x,y,z,e):
+ return (x**2-2*e)*y
+def D(xi,xf,y,z,n,e):
+ xx,yy=[],[]
+ h=(xf-xi)/(n-1)
+ for i in range(n):
+  x=xi+i*h
+  xx.append(x)
+  ya=y
+  y=y+h*z
+  z=z+h*f(x,ya,z,e)
+  yy.append(y)
+ return xx,yy
+e=np.arange(0,6,0.1)
+aa,en=[],[]
+n=10000
+for i in range(len(e)):
+ a1,a2=D(-a,a,0,0.01,n,e[i])
+ aa.append(a2[-1])
+#plt.plot(e,aa)
+#plt.axhline()
+#plt.show()
+for i in range(len(e)-1):
+ if aa[i]*aa[i+1]<0:
+  en.append(e[i])
+print(en)
+for i in range(2):
+ x1,y1=D(-a,a,0,0.01,n,en[2*i+1])
+ x1=np.array(x1)
+ y1=np.array(y1)
+ N=(1/np.trapz(y1**2,x1))**0.5
+ plt.plot(x1[5000:],N*y1[5000:])
+ 
+	
+plt.title('Half harmonic oscillator',size=30)
+plt.xlabel('x------>',size=30)
+plt.ylabel('$\psi(x)$------->',size=30)
+plt.axhline()
+plt.axvline()
+plt.grid()
+plt.show()
